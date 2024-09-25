@@ -145,7 +145,7 @@ char *create_json_number_param(const double value_number)
     return json_number == NULL ? NULL : cJSON_PrintUnformatted(json_number);
 }
 
-char *create_uuid_string()
+char *create_uuid_string(void)
 {
     uuid_t uuid;
     uuid_generate(uuid);

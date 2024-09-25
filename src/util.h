@@ -128,7 +128,7 @@ char *create_json_string_param(const char *value_string);
 char *create_json_number_param(const double value_number);
 
 // create a UUID string. caller must free.
-char *create_uuid_string();
+char *create_uuid_string(void);
 
 // get a JSON doc from a SUBDOC response (decoded from JSON fragment). caller must free.
 lcb_STATUS get_json_doc_from_subdoc_resp(const lcb_RESPSUBDOC *resp, size_t index, cJSON **json);

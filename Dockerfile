@@ -1,4 +1,6 @@
-FROM ubuntu:20.04
+# need amd64 until libcouchbase releases arm64 images
+# also needed for minisign (but that's easier to build manually than libcouchbase)
+FROM --platform=linux/amd64 ubuntu:20.04
 
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -24,13 +26,13 @@ RUN apt-get install -y libcouchbase3 \
     libcouchbase3-libevent
 
 # Install kore.io
-RUN wget https://kore.io/releases/kore-4.1.0.tar.gz
-RUN wget https://kore.io/releases/kore-4.1.0.tar.gz.minisig
+RUN wget https://kore.io/releases/kore-4.2.3.tar.gz
+RUN wget https://kore.io/releases/kore-4.2.3.tar.gz.minisig
 RUN add-apt-repository ppa:dysfunctionalprogramming/minisign \
     && apt-get install -y minisign
-RUN minisign -Vm kore-4.1.0.tar.gz -P RWSxkEDc2y+whfKTmvhqs/YaFmEwblmvar7l6RXMjnu6o9tZW3LC0Hc9 \
-    && tar -xvzf kore-4.1.0.tar.gz \
-    && cd kore-4.1.0 \
+RUN minisign -Vm kore-4.2.3.tar.gz -P RWSxkEDc2y+whfKTmvhqs/YaFmEwblmvar7l6RXMjnu6o9tZW3LC0Hc9 \
+    && tar -xvzf kore-4.2.3.tar.gz \
+    && cd kore-4.2.3 \
     && make \
     && make install \
     && cp kore /usr/local/bin/kore \

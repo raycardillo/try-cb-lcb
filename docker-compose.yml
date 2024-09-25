@@ -1,8 +1,7 @@
-version: "3.9"
-
 services:
   backend:
     container_name: try-cb-api
+    platform: linux/amd64 # needed until libcouchbase releases arm64 images
     build: .
     depends_on:
       - db
@@ -19,8 +18,8 @@ services:
     entrypoint: [ "wait-for-it", "backend:8080", "--timeout=400", "--strict", "--", "npm", "run", "serve" ]
 
   db:
-    image: couchbase/server-sandbox:7.0.0
-    container_name: couchbase-sandbox-7.0.0
+    image: couchbase/server-sandbox:7.6.3
+    container_name: couchbase-sandbox-7.6.3
     ports:
       - "8091-8095:8091-8095"
       - "9102:9102"

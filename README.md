@@ -30,12 +30,12 @@ This project has the following direct dependencies (which may pull in transitive
 - [libcouchbase] _(3.3.0)_ - C library SDK for Couchbase.
 - [libjwt] _(1.13.1)_ - C library for encoding JSON Web Tokens.
 - [libuuid] _(1.6.2)_ - C library for generating UUIDs.
-- [Kore.io] _(4.1.0)_ - An HTTP server framework written in C. _Note that **Kore.io 4.2.0** seems to have made a breaking change in the route declarations so this sample still requires 4.1.0 until we have time to refactor to 4.2.0._
+- [Kore.io] _(4.2.3)_ - An HTTP server framework written in C.
 - [cJSON] - C library for serializing JSON data (source copied here).
 
 The following are indirect dependencies or tools that may be useful for development:
 - [Swagger] - Language for describing a REST API.
-- [Docker] - Provides containers to help get up and running quickly.
+- [Docker] - Provides containers to help get up and running quickly. Docker Desktop is not required. You can install `docker` and the `docker-compose` plugin from command line on macOS for example.
 - [Visual Studio Code] - IDE with support for C/C++ and many other technologies.
 
 -----
@@ -56,12 +56,12 @@ You may also want to consider [Running All Components Manually](#running-all-com
 
 ## Running with Docker Compose
 
-You will need [Docker] installed on your machine in order to run this application as we have defined a [_Dockerfile_](Dockerfile) and a [_docker-compose.yml_](docker-compose.yml) to orchestrate all three of the [Server Layer Components](#server-layer-components).
+You will need [Docker] and the `docker-compose` plugin installed on your machine in order to run this application as we have defined a [_Dockerfile_](Dockerfile) and a [_docker-compose.yml_](docker-compose.yml) to orchestrate all three of the [Server Layer Components](#server-layer-components).
 
 Running with Docker Compose is as simple as running:
 
 ```
-docker-compose up
+docker compose up
 ```
 
 > **_NOTE:_** When you run the application for the first time, it will pull/build the relevant Docker images, so it might take a bit longer than usual.
@@ -70,7 +70,7 @@ Once everything is up and running, you can access the `backend` server REST API 
 
 Using the web application, you can then register a user account, login, and exercise all the features of the application.
 
-To end the application press <kbd>Control</kbd>+<kbd>C</kbd> in the terminal and wait for docker-compose to gracefully stop your containers.
+To end the application press <kbd>Control</kbd>+<kbd>C</kbd> in the terminal and wait for `docker compose` to gracefully stop your containers.
 
 
 ## Mix and Match Services
@@ -97,7 +97,7 @@ curl --fail -s -u <username>:<password> -X PUT \
 Once you have a Couchbase Server running, the `travel-sample` sample data installed, and the `hotels-index` created, you can start the `frontend` and `backend` by passing the Couchbase server connection params as environment variables:
 
 ```
-CB_HOST=cb.example.com CB_USER=Administrator CB_PSWD=password docker-compose -f mix-and-match.yml up backend frontend
+CB_HOST=cb.example.com CB_USER=Administrator CB_PSWD=password docker compose -f mix-and-match.yml up backend frontend
 ```
 
 ### Running the backend manually
@@ -107,7 +107,7 @@ If you want to run the `backend` REST server (this project) yourself without usi
 For example, if you want to see how the sample frontend Vue application works with your manually running `backend` changes, you can just run the `frontend` with:
 
 ```
-docker-compose -f mix-and-match.yml up frontend
+docker compose -f mix-and-match.yml up frontend
 ```
 
 ### Running the frontend manually
@@ -125,9 +125,7 @@ For local development, the instructions mentioned in [Mix and Match Services](#m
 
 ### Local Development Setup
 
-There are a few libraries required, but [Kore.io] (4.1.0) is the most limiting dependency. Kore supports several unix variants, but for most developers it's easiest to get started on **macOS 10.10.x** or greater using [homebrew](https://brew.sh/).
-
-> **_NOTE:_** **Kore.io 4.2.0** seems to have introduced a breaking change in the route declarations, so this sample requires `4.1.0` specifically until we have time to refactor to `4.2.0` and retest.
+There are a few libraries required, but [Kore.io] (4.2) is the most limiting dependency. Kore supports several unix variants, but for most developers it's easiest to get started on **macOS 10.10.x** or greater using [homebrew](https://brew.sh/).
 
 #### Installing with Homebrew on macOS
 
@@ -139,15 +137,17 @@ export LIBRARY_PATH=/opt/homebrew/lib
 
 First install the more common library dependencies:
 ```sh
-brew install libcouchbase libjwt ossp-uuid
+brew install libcouchbase libjwt ossp-uuid kore
 ```
 
-Installing _**Kore 4.1.0**_ specifically with Homebrew takes a little more work these days:
+Optionally install docker from homebrew instead of using Docker Desktop:
 ```sh
-brew tap-new local/kore
-brew extract --version=4.1.0 kore local/kore
-brew install kore@4.1.0
-brew link --overwrite kore@4.1.0
+brew install docker docker-compose
+```
+
+Finally, it's a good idea to install rosetta if on computer using Apple Silicon:
+```
+softwareupdate --install-rosetta
 ```
 
 ### Starting the Backend

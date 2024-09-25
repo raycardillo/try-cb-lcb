@@ -159,7 +159,7 @@ done:
     }
 }
 
-static void destroy_cb_instance()
+static void destroy_cb_instance(void)
 {
     if (_tcblcb_lcb_instance != NULL) {
         lcb_destroy(_tcblcb_lcb_instance);
@@ -199,8 +199,8 @@ void kore_parent_configure(__unused int argc, __unused char *argv[])
 
     struct kore_buf *conn_buf = kore_buf_alloc(BUFSIZ);
     kore_buf_appendf(conn_buf, "%.*s%.*s",
-        _cb_scheme_strlen, _cb_scheme_string,
-        _cb_host_strlen, _cb_host_string);
+        (int)_cb_scheme_strlen, _cb_scheme_string,
+        (int)_cb_host_strlen, _cb_host_string);
     _cb_conn_string = kore_buf_stringify(conn_buf, NULL);
     _cb_conn_strlen = strlen(_cb_conn_string);
     
@@ -208,7 +208,7 @@ void kore_parent_configure(__unused int argc, __unused char *argv[])
     kore_log(LOG_INFO, "Couchbase Username: %s", _cb_user_string);
 }
 
-void kore_worker_configure()
+void kore_worker_configure(void)
 {
     bool connected = false;
 
@@ -281,7 +281,7 @@ done:
     }
 }
 
-void kore_worker_teardown()
+void kore_worker_teardown(void)
 {
     destroy_cb_instance();
 }
